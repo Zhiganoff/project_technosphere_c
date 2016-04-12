@@ -1,11 +1,8 @@
-//
-// Created by zhigan on 06.04.16.
-//
-
 #ifndef PROJECT_TECHNOSPHERE_C_CASE_H
 #define PROJECT_TECHNOSPHERE_C_CASE_H
 
 #include <string>
+#include <vector>
 #include "date.h"
 
 class Status {
@@ -46,10 +43,10 @@ private:
 
 class Case {
 public:
-    Case(std::map<std::string, int> init): priority(Priority(init["Priority"])),
-                                           regularity(Regularity(init["Regularity"])),
-                                           color(Color(init["Color"])) {}
-    void set_case(std::map<std::string, int> init);
+    Case(std::map<std::string, int> &init): priority(Priority(init["Priority"])),
+                                            regularity(Regularity(init["Regularity"])),
+                                            color(Color(init["Color"])) {}
+    void set_case(std::map<std::string, int> &init);
     void set_priority(int new_priority);
     void set_regularity(int new_regularity);
     void set_color(int new_color);
@@ -64,14 +61,15 @@ private:
 
 class Task: public Case {
 public:
-    Task(std::map<std::string, int> init, int new_status, std::string new_description, Date time):
+    Task(std::map<std::string, int> &init, int new_status, std::string &new_description, Date time):
             Case(init),
             status(Status(new_status)),
             description(new_description),
             deadline(time) {}
-    void set_task(std::map<std::string, int> init, int new_status, std::string new_description, Date time);
-    void set_description(std::string new_description);
-    void set_deadline(Date time);
+    void set_task(std::map<std::string, int> &init, int new_status, std::string &new_description,
+                  Date &time);
+    void set_description(std::string &new_description);
+    void set_deadline(Date &time);
     std::string get_description() const;
     Date get_deadline() const;
 private:
@@ -82,9 +80,9 @@ private:
 
 class Note: public Case {
 public:
-    Note(std::map<std::string, int> init, std::string new_subject): Case(init),
-                                                                    subject(new_subject) {}
-    void set_subject(std::string new_subject);
+    Note(std::map<std::string, int> &init, std::string &new_subject): Case(init),
+                                                                      subject(new_subject) {}
+    void set_subject(std::string &new_subject);
     std::string get_subject() const;
 private:
     std::string subject;
@@ -92,12 +90,12 @@ private:
 
 class Event: public Case {
 public:
-    Event(std::map<std::string, int> init, std::string new_name, Date new_time): Case(init),
-                                                                                 name(new_name),
-                                                                                 time(new_time) {}
+    Event(std::map<std::string, int> &init, std::string &new_name, Date &new_time): Case(init),
+                                                                                    name(new_name),
+                                                                                    time(new_time) {}
 
-    void set_name(std::string new_name);
-    void set_time(Date new_time);
+    void set_name(std::string &new_name);
+    void set_time(Date &new_time);
     std::string get_name() const;
     Date get_time() const;
 private:
@@ -107,12 +105,23 @@ private:
 
 class View: public Case {
 public:
-    View(std::map<std::string, int> init, std::string new_description): Case(init),
-                                                                        description(new_description) {}
-    void set_description(std::string new_description);
+    View(std::map<std::string, int> &init, std::string &new_description): Case(init),
+                                                                          description(new_description) {}
+    void set_description(std::string &new_description);
     std::string get_description() const;
 private:
     std::string description;
+};
+
+class Case_List {
+public:
+    Case_List(): list(nullptr){}
+    std::vector<Case *> *get_list() const;
+    void add_case(Case cost);
+    void delete_case(int num);
+private:
+    std::vector<Case *> *list;
+    static const std::size_t size_block = 10; //Размер блока выделяемой памяти
 };
 
 #endif //PROJECT_TECHNOSPHERE_C_CASE_H

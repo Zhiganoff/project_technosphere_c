@@ -1,10 +1,6 @@
-//
-// Created by zhigan on 06.04.16.
-//
-
 #include "date.h"
 
-void Date::set_date(std::map<std::string, int> init) {
+void Date::set_date(std::map<std::string, int> &init) {
     *this = Date(init);
 }
 

@@ -1,7 +1,3 @@
-//
-// Created by zhigan on 06.04.16.
-//
-
 #include "case.h"
 
 void Status::set_status(int new_status) {
@@ -35,7 +31,7 @@ int Color::get_color() const {
     return type_color;
 }
 
-void Case::set_case(std::map<std::string, int> init) {
+void Case::set_case(std::map<std::string, int> &init) {
     this->Case(init);
 }
 
@@ -63,15 +59,15 @@ int Case::get_color() const {
     return color.get_color();
 }
 
-void Task::set_task(std::map<std::string, int> init, int new_status, std::string new_description, Date time) {
+void Task::set_task(std::map<std::string, int> &init, int new_status, std::string &new_description, Date &time) {
     this->Task(init, new_status, new_description, time);
 }
 
-void Task::set_description(std::string new_description) {
+void Task::set_description(std::string &new_description) {
     description = new_description;
 }
 
-void Task::set_deadline(Date time) {
+void Task::set_deadline(Date &time) {
     deadline = time;
 }
 
@@ -83,7 +79,7 @@ Date Task::get_deadline() const {
     return deadline;
 }
 
-void Note::set_subject(std::string new_subject) {
+void Note::set_subject(std::string &new_subject) {
     subject = new_subject;
 }
 
@@ -91,11 +87,11 @@ std::string Note::get_subject() const {
     return subject;
 }
 
-void Event::set_name(std::string new_name) {
+void Event::set_name(std::string &new_name) {
     name = new_name;
 }
 
-void Event::set_time(Date new_time) {
+void Event::set_time(Date &new_time) {
     time = new_time;
 }
 
@@ -107,10 +103,26 @@ Date Event::get_time() const {
     return time;
 }
 
-void View::set_description(std::string new_description) {
+void View::set_description(std::string &new_description) {
     description = new_description;
 }
 
 std::string View::get_description() const {
     return description;
+}
+
+std::vector<Case *> *Case_List::get_list() const {
+    return list;
+}
+
+void Case_List::add_case(Case subj) {
+    if (list->capacity() % size_block == 0) {
+        list->reserve(list->capacity() + size_block);
+    }
+    Case *tmp = new Case(subj);
+    list->push_back(tmp);
+}
+
+void Case_List::delete_case(int num) {
+    list->erase(list->begin() + num);
 }
